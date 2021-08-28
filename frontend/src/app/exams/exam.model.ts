@@ -1,10 +1,11 @@
 export class Exam {
     constructor(
-      public title: string,
-      public description: string,
-      public _id?: number,
-      public updatedAt?: Date,
-      public createdAt?: Date,
-      public lastUpdatedBy?: string,
-    ) { }
+      public title: string | undefined,
+      public description: string | undefined,
+      public _id?: number | undefined,
+      public updatedAt?: Date | undefined,
+      public createdAt?: Date | undefined,
+      public lastUpdatedBy?: string | undefined
+    ) {}
   }
+  
