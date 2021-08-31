@@ -18,7 +18,7 @@ export class ExamsApiService {
   // GET list of public, future events
   getExams(): Observable<Exam[]> {
     return this.http
-      .get(`${API_URL}/exams`)
+      .get<Exam[]>(`${API_URL}/exams`)
       .catch(ExamsApiService._handleError);
   }
 }

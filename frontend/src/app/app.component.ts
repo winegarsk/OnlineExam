@@ -14,6 +14,13 @@ export class AppComponent implements OnInit, OnDestroy {
   examsList: Exam[];
 
   constructor(private examsApi: ExamsApiService) {
+    this.examsList = [];
+    this.examsListSubs = this.examsApi .getExams()
+    .subscribe(res => {
+        this.examsList = res;
+      },
+      console.error
+    ); ;
   }
 
   ngOnInit() {
