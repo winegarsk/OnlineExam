@@ -5,6 +5,7 @@ import 'rxjs/add/operator/catch';
 import {API_URL} from '../env';
 import {Exam} from './exam.model';
 
+
 @Injectable()
 export class ExamsApiService {
 
@@ -15,12 +16,20 @@ export class ExamsApiService {
     return Observable.throw(err.message || 'Error: Unable to complete request.');
   }
 
-
   // Changed to "any" as quick workaround. Will need to find better solution. Ref: error TS2322
   // GET list of public, future events
   getExams(): Observable<any> {
     return this.http
-      .get<Exam[]>(`${API_URL}/exams`)
-      .catch(ExamsApiService._handleError);
+    .get<Exam[]>(`${API_URL}/exams`)
+    .catch(ExamsApiService._handleError);
   }
+
+  saveExam(exam: Exam): Observable<any> {
+  return this.http
+  .post(`${API_URL}/exams`, exam);
 }
+
+}
+
+
+

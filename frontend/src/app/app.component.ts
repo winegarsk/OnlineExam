@@ -1,39 +1,15 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Subscription} from 'rxjs/Subscription';
-import {ExamsApiService} from './exams/exams-api.service';
-import {Exam} from './exams/exam.model';
+import {Component} from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.sass']
+  template: `
+    <div style="text-align:center">
+      <h1>Exams</h1>
+    </div>
+    <h2>Here are the exams created so far: </h2>
+    <router-outlet></router-outlet>
+  `,
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, OnDestroy {
-  title = 'frontend';
-  examsListSubs: Subscription|undefined;
-  examsList: Exam[]|undefined;
-
-  constructor(private examsApi: ExamsApiService) {
-    this.examsList = [];
-    this.examsListSubs = this.examsApi .getExams()
-    .subscribe(res => {
-        this.examsList = res;
-      },
-      console.error
-    ); ;
-  }
-
-  ngOnInit() {
-    this.examsListSubs = this.examsApi
-      .getExams()
-      .subscribe(res => {
-          this.examsList = res;
-        },
-        console.error
-      );
-  }
-
-  ngOnDestroy() {
-    this?.examsListSubs?.unsubscribe();
-  }
-}
+export class AppComponent { }
