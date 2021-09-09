@@ -11,25 +11,25 @@ import {RouterModule, Routes} from '@angular/router';
 import {ExamsComponent} from './exams/exams.component';
 
 const appRoutes: Routes = [
-  { path: 'callback', component: CallbackComponent },
+ // { path: 'callback', component: CallbackComponent },
   { path: 'new-exam', component: ExamFormComponent },
   { path: '', component: ExamsComponent },
 ];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    CallbackComponent,
-    ExamFormComponent,
-    ExamsComponent,
-  ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    RouterModule.forRoot(
-      appRoutes,
-    ),
+    RouterModule,
+    
   ],
+  declarations: [
+    AppComponent,
+   // CallbackComponent,
+    ExamFormComponent,
+    ExamsComponent,
+  ],
+ 
   providers: [ExamsApiService],
   bootstrap: [AppComponent]
 })

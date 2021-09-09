@@ -20,6 +20,7 @@
     "@angular/router": "~12.2.0",
     "@auth0/auth0-angular": "^1.6.0",
     "angular-auth0": "^3.1.0",
+    "auth0-web": "^1.7.0",
     "rxjs": "~6.6.0",
     "rxjs-compat": "^6.6.7",
     "tslib": "^2.3.0",
