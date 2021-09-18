@@ -18,7 +18,7 @@ export class ExamsApiService {
 
   // Changed to "any" as quick workaround. Will need to find better solution. Ref: error TS2322
   // GET list of public, future events
-  getExams(): Observable<any> {
+  getExams(): Observable<Exam[]> {
     return this.http
     .get<Exam[]>(`${API_URL}/exams`)
     .catch(ExamsApiService._handleError);
