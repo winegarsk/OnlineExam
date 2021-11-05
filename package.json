@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "online-exam",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -18,9 +18,6 @@
     "@angular/platform-browser": "~12.2.0",
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
-    "@auth0/auth0-angular": "^1.6.0",
-    "angular-auth0": "^3.1.0",
-    "auth0-web": "^1.7.0",
     "rxjs": "~6.6.0",
     "rxjs-compat": "^6.6.7",
     "tslib": "^2.3.0",
@@ -30,7 +27,6 @@
     "@angular-devkit/build-angular": "~12.2.1",
     "@angular/cli": "~12.2.1",
     "@angular/compiler-cli": "~12.2.0",
-    "@types/auth0-js": "^9.14.5",
     "@types/jasmine": "~3.8.0",
     "@types/node": "^12.11.1",
     "jasmine-core": "~3.8.0",
