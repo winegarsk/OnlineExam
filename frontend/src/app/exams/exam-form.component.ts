@@ -7,7 +7,7 @@ import {Router} from "@angular/router";
   selector: 'exam-form',
   template: `
     <div>
-      <h2>New Exam</h2>
+      <h2>New Fucking Exam</h2>
       <label for="exam-title">Title</label>
       <input id="exam-title" (keyup)="updateTitle($event)">
       <label for="exam-description">Description</label>
