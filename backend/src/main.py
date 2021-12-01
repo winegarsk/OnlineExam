@@ -1,5 +1,5 @@
 # coding=utf-8
-from flask import CORS
+from flask_cors import CORS
 from flask import Flask, jsonify, request
 
 from .entities.entity import Session, engine, Base
