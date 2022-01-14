@@ -1,6 +1,16 @@
 version: '3'
 
-services: 
+services:
+ web:
+  build: .
+  volumes:
+   - src:/src
+  ports:
+   - "5000:5000"
+  env_file:
+   - ./.env.dev
+  links:
+   - database
  database:
   image: 'postgres:latest'
   ports:
@@ -13,3 +23,6 @@ services:
    POSTGRES_USER: postgres
    POSTGRES_PASSWORD: postgres
    POSTGRES_DB: default_database
+
+volumes:
+  app: {}
