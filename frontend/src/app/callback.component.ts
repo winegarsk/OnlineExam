@@ -1,4 +1,4 @@
-import * as Auth0 from 'auth0-web'
+import * as Auth0 from 'auth0-web';
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 

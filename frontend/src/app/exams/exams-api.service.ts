@@ -1,9 +1,12 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import 'rxjs/add/operator/catch';
+
 import {API_URL} from '../env';
 import {Exam} from './exam.model';
+
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import * as Auth0 from 'auth0-web';
 
 
 @Injectable()
@@ -16,20 +19,23 @@ export class ExamsApiService {
     return Observable.throw(err.message || 'Error: Unable to complete request.');
   }
 
-  // Changed to "any" as quick workaround. Will need to find better solution. Ref: error TS2322
   // GET list of public, future events
   getExams(): Observable<Exam[]> {
     return this.http
-    .get<Exam[]>(`${API_URL}/exams`)
-    .catch(ExamsApiService._handleError);
+      .get<Exam[]>(`${API_URL}/exams`)
+      .catch(ExamsApiService._handleError);
   }
 
+
   saveExam(exam: Exam): Observable<any> {
-  return this.http
-  .post(`${API_URL}/exams`, exam);
-}
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${Auth0.getAccessToken()}`
+      })
+    };
+    return this.http
+      .post(`${API_URL}/exams`, exam, httpOptions);
+  }
 
 }
-
-
 

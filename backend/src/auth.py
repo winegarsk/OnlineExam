@@ -1,21 +1,25 @@
 import json
+
 from flask import request, _request_ctx_stack
+
 from functools import wraps
-from jose import jwt
+from jose import jwt 
 from urllib.request import urlopen
 
 
+# Three constants to communicate with Auth0 to validate users. ( Must replace later with values of our Auth0 account)
 AUTH0_DOMAIN = 'bk-samples.auth0.com'
 ALGORITHMS = ['RS256']
 API_AUDIENCE = 'https://online-exam.com'
 
-
+#This represents errors originated in this module
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
 
 
+# this Function will read Authorization headers to fetch their access tokens
 def get_token_auth_header():
     """Obtains the Access Token from the Authorization Header
     """
@@ -49,7 +53,7 @@ def get_token_auth_header():
     token = parts[1]
     return token
 
-
+#Defines the decorator. Will fetch the correct public key from Auth0 to validate tokens. 
 def requires_auth(f):
     """Determines if the Access Token is valid
     """
@@ -106,3 +110,5 @@ def requires_auth(f):
         }, 400)
 
     return decorated
+
+
