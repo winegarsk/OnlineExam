@@ -1,7 +1,7 @@
 FROM nginx:1.13-alpine
 COPY conf /etc/nginx/conf.d/default.conf
 FROM python:3.9-alpine
-ENTRYPOINT [ "entrypoint.sh" ]
+# ENTRYPOINT [ "entrypoint.sh" ]
 ENV FLASK_APP=/backend/src/app/__init__.py
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1

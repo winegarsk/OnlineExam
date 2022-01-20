@@ -15,7 +15,7 @@ services:
   image: 'postgres:latest'
   ports:
     - 5432:5432
-  command: ./entrypoint.sh
+  # entrypoint: "entrypoint.sh"
   volumes:
     - ./db-data/:/var/lib/postgresql/data=rwx/
 
