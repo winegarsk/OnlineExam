@@ -1,15 +1,28 @@
-version: '3'
+version: '3.9'
 
-services: 
+services:
+ web:
+  build: .
+  volumes:
+   - ./web:/app
+  ports:
+   - "5000:5000"
+  env_file:
+   - ./env.dev
+  links:
+   - database
  database:
   image: 'postgres:latest'
   ports:
     - 5432:5432
-
+  # entrypoint: "entrypoint.sh"
   volumes:
     - ./db-data/:/var/lib/postgresql/data=rwx/
 
   environment: 
    POSTGRES_USER: postgres
    POSTGRES_PASSWORD: postgres
-   POSTGRES_DB: default_database
+   POSTGRES_DB: onlineexam-database-1
+
+volumes:
+  postgres_data:

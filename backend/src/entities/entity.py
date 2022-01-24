@@ -5,7 +5,7 @@ from sqlalchemy import create_engine, Column, String, Integer, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-db_url = 'localhost:5432'
+db_url = '0.0.0.0:5432'
 db_name = 'online_exam'
 db_user = 'postgres'
 db_password = 'postgres'

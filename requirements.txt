@@ -1,0 +1,8 @@
+Flask==1.1.2
+Flask-SQLAlchemy==2.5.1
+Flask-Cors==3.0.10
+gunicorn==20.1.0
+pipenv==2022.1.8
+marshmallow==3.14.1
+jose==1.0.0
+python-jose==3.3.0
