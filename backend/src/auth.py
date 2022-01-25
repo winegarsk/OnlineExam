@@ -10,7 +10,7 @@ from urllib.request import urlopen
 # Three constants to communicate with Auth0 to validate users. ( Must replace later with values of our Auth0 account)
 AUTH0_DOMAIN = 'bk-samples.auth0.com'
 ALGORITHMS = ['RS256']
-API_AUDIENCE = 'https://online-exam.com'
+API_AUDIENCE = 'https://online-exam.digituz.com.br'
 
 #This represents errors originated in this module
 class AuthError(Exception):
