@@ -33,7 +33,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     AuthModule.forRoot({
       domain: 'dev-dm6nugc4.us.auth0.com',
-      clientId: 'b4eqVcMJP1je1B0VXypxyb0eyYQ6vUJg'
+      clientId: '14VdA4E3qePSB1rSWJQhrMgQysNlWPZV'
     }),
    RouterModule.forRoot(
       appRoutes,

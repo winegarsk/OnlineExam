@@ -26,7 +26,6 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true,
-    "skipLibCheck": true,
-    "noImplicitAny": false 
+    
   }
 }
