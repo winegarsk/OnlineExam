@@ -6,7 +6,7 @@ import {API_URL} from '../env';
 import {Exam} from './exam.model';
 
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
-import * as Auth0 from 'auth0-web';
+//import * as Auth0 from 'auth0-web';
 
 
 @Injectable()
@@ -30,7 +30,7 @@ export class ExamsApiService {
   saveExam(exam: Exam): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': `Bearer ${Auth0.getAccessToken()}`
+      //  'Authorization': `Bearer ${Auth0.getAccessToken()}`
       })
     };
     return this.http
