@@ -1,4 +1,4 @@
-import * as Auth0 from 'auth0-web';
+//import * as Auth0 from 'auth0-web';
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 
@@ -13,9 +13,9 @@ export class CallbackComponent implements OnInit {
 
   ngOnInit(): void {
     const self = this;
-    Auth0.handleAuthCallback((err) => {
+    /* Auth0.handleAuthCallback((err) => {
       if (err) alert(err);
       self.router.navigate(['/']);
-    });
+    }); */
   }
 }

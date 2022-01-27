@@ -1,14 +1,14 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {HttpClientModule} from '@angular/common/http';
-
+import { AuthModule } from '@auth0/auth0-angular';
 import {AppComponent} from './app.component';
 import {ExamsApiService} from './exams/exams-api.service';
 import {ExamFormComponent} from './exams/exam-form.components';
 import {RouterModule, Routes} from '@angular/router';
-import {ExamsComponent} from './exams/exams.components';
+import {ExamsComponent} from './exams/exams.component';
 
-import * as Auth0 from 'auth0-web';
+// import * as Auth0 from 'auth0-web';
 import {CallbackComponent} from './callback.component';
 
 
@@ -31,7 +31,11 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     HttpClientModule,
-    RouterModule.forRoot(
+    AuthModule.forRoot({
+      domain: 'dev-4-frsuj0.us.auth0.com',
+      clientId: 'kYsfByzSV4rxmTJSX6jmaQumLeJZVjoM'
+    }),
+   RouterModule.forRoot(
       appRoutes,
       ),
   ],
@@ -39,13 +43,13 @@ const appRoutes: Routes = [
   bootstrap: [AppComponent]
 })
 export class AppModule {
-    constructor() {
+ /* constructor() {
     Auth0.configure({
-      domain: 'dev-4-frsuj0.us.auth0.com',
+      domain: 'dev-dm6nugc4.us.auth0.com',
       audience: 'https://online-exam.digituz.com.br',
-      clientID: 'L41cggHUcfbXkZMz78nIfLVQcUOhFk09',
+      clientID: 'OznIr8gSuGNtPCfvFUsqgOXU4gd4PKaD',
       redirectUri: 'http://localhost:4200/callback',
       scope: 'openid profile manage:exams'
     });
-  }
+  } */
 }
