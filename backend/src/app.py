@@ -1,18 +1,61 @@
 # coding=utf-8
 from flask_cors import CORS
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request,redirect,render_template, session, url_for
 
 from .entities.entity import Session, engine, Base
 from .entities.exam import Exam, ExamSchema
 from .auth import AuthError, requires_auth
 
+#Imports for connecting backend to auth0
+from functools import wraps
+import json
+from os import environ as env
+from werkzeug.exceptions import HTTPException
+from dotenv import load_dotenv, find_dotenv
+from authlib.integrations.flask_client import OAuth
+from six.moves.urllib.parse import urlencode
+
 # creating the Flask application
 app = Flask(__name__)
 CORS(app)
 
+#
+# oauth = OAuth(app)
 # if needed, generate database schema
 Base.metadata.create_all(engine)
 
+auth0 = oauth.register(
+    'auth0',
+    client_id='kYsfByzSV4rxmTJSX6jmaQumLeJZVjoM',
+    client_secret='fDR6hxNSGJApKrxTdZyD2EC4ezV6oV4F5AlM_lm_Pvgb8UijifazIeJ8b3HzBEUL',
+    api_base_url='https://online-exam.com',
+    access_token_url='https://online-exam.com/oauth/token',
+    authorize_url='https://online-exam.com/authorize',
+    client_kwargs={
+        'scope': 'openid profile email',
+    },
+)
+
+# Routes for login, callback 
+@app.route('/login')
+def login():
+    return auth0.authorize_redirect(redirect_uri='http://localhost:4200')
+
+@app.route('/callback')
+def callback_handling():
+    # Handles response from token endpoint
+    auth0.authorize_access_token()
+    resp = auth0.get('userinfo')
+    userinfo = resp.json()
+
+    # Store the user information in flask session.
+    session['jwt_payload'] = userinfo
+    session['profile'] = {
+        'user_id': userinfo['sub'],
+        'name': userinfo['name'],
+        'picture': userinfo['picture']
+    }
+    return redirect('/dashboard')
 
 @app.route('/exams')
 def get_exams():

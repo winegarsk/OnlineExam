@@ -8,7 +8,7 @@ from urllib.request import urlopen
 
 
 # Three constants to communicate with Auth0 to validate users. ( Must replace later with values of our Auth0 account)
-AUTH0_DOMAIN = 'bk-samples.auth0.com'
+AUTH0_DOMAIN = 'dev-4-frsuj0.us.auth0.com'
 ALGORITHMS = ['RS256']
 API_AUDIENCE = 'https://online-exam.com'
 
