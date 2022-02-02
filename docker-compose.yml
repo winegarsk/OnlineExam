@@ -2,16 +2,23 @@ version: '3.9'
 
 services:
  web:
-  build: .
+  build: /frontend
+  image: frontend
+  container_name: frontend
+  restart: always
   volumes:
    - ./web:/app
   ports:
    - "5000:5000"
+  expose: 
+   - "5000"
   env_file:
    - ./env.dev
   links:
    - database
+ 
  database:
+  build: .
   image: 'postgres:latest'
   ports:
     - 5432:5432
