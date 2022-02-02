@@ -6,7 +6,7 @@ import {AppComponent} from './app.component';
 import {ExamsApiService} from './exams/exams-api.service';
 import {ExamFormComponent} from './exams/exam-form.components';
 import {RouterModule, Routes} from '@angular/router';
-import {ExamsComponent} from './exams/exams.component';
+import {ExamsComponent} from './exams/exams.components';
 
 // import * as Auth0 from 'auth0-web';
 import {CallbackComponent} from './callback.component';
