@@ -10,7 +10,7 @@ RUN npm install
 COPY . /app
 
 
-RUN npm run build --prod
+RUN npm run build 
 
 # Expose $PORT on container.
 # We use a varibale here as the port is something that can differ on the environment.

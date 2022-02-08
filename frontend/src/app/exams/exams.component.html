@@ -1,0 +1,21 @@
+<!-- <div>
+    <ul *ngIf="auth.user$ | async as user">
+      <li>Hello {{ user.name }}</li>
+    </ul>
+    <button routerLink="/new-exam">New Exam</button>
+    <ng-container *ngIf="auth.isAuthenticated$ | async; else loggedOut">
+    <button (click)="auth.logout({ returnTo: document.location.origin })">
+      Log out
+    </button>
+  </ng-container>
+
+  <ng-template #loggedOut>
+    <button (click)="auth.loginWithRedirect()">Log in</button>
+  </ng-template>
+    
+    <ul>
+      <li *ngFor="let exam of examsList">
+        {{exam.title}}
+      </li>
+    </ul>
+  </div> -->

@@ -8,9 +8,7 @@ services:
   restart: always
   environment:
       PORT: 5000
-      PROXY_API: http://QuizMe:5432/
-  volumes:
-   - ./web:/app
+      PROXY_API: http://quizme:5432/
   ports:
    - "5000:80"
   expose: 
@@ -25,7 +23,6 @@ services:
   image: 'postgres:latest'
   ports:
     - 5432:5432
-  # entrypoint: "entrypoint.sh"
   volumes:
     - ./db-data/:/var/lib/postgresql/data=rwx/
 
