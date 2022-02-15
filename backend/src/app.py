@@ -2,12 +2,12 @@
 from flask_cors import CORS
 from flask import Flask, jsonify, request,redirect,render_template, session, url_for
 
-import entities.entity
-import entities.exam
-#from .entities.entity import Session, engine, Base
-#from .entities.exam import Exam, ExamSchema
-import auth
-#from .auth import AuthError, requires_auth
+#import entities.entity
+#import entities.exam
+from .entities.entity import Session, engine, Base
+from .entities.exam import Exam, ExamSchema
+#import auth
+from .auth import AuthError, requires_auth
 
 #Imports for connecting backend to auth0
 from six.moves.urllib.request import urlopen
@@ -18,17 +18,20 @@ from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv, find_dotenv
 from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
+from flask_sqlalchemy import SQLAlchemy
 
 # creating the Flask application
 app = Flask(__name__)
-
+app.config.from_object("src.config.Config")
+database = SQLAlchemy(app)
 
 CORS(app)
 
 
 oauth = OAuth(app)
+
 # if needed, generate database schema
-entities.entity.Base.metadata.create_all(entities.entity.engine)
+Base.metadata.create_all(engine)
 
 auth0 = oauth.register(
     'auth0',
@@ -66,11 +69,11 @@ def callback_handling():
 @app.route('/exams')
 def get_exams():
     # fetching from the database
-    session = entities.entity.Session()
-    exam_objects = session.query(entities.exam.Exam).all()
+    session = Session()
+    exam_objects = session.query(Exam).all()
 
     # transforming into JSON-serializable objects
-    schema = entities.exam.ExamSchema(many=True)
+    schema = ExamSchema(many=True)
     exams = schema.dump(exam_objects)
 
     # serializing as JSON
@@ -79,25 +82,25 @@ def get_exams():
 
 
 @app.route('/exams', methods=['POST'])
-@auth.requires_auth
+@requires_auth
 def add_exam():
     # mount exam object
-    posted_exam = entities.exam.ExamSchema(only=('title', 'description'))\
+    posted_exam = ExamSchema(only=('title', 'description'))\
         .load(request.get_json())
 
-    exam = entities.exam.Exam(**posted_exam, created_by="HTTP post request")
+    exam = Exam(**posted_exam, created_by="HTTP post request")
 
     # persist exam
-    session = entities.entity.Session()
+    session = Session()
     session.add(exam)
     session.commit()
 
     # return created exam
-    new_exam = entities.exam.ExamSchema().dump(exam).data
+    new_exam = ExamSchema().dump(exam).data
     session.close()
     return jsonify(new_exam), 201
 
-@app.errorhandler(auth.AuthError)
+@app.errorhandler(AuthError)
 def handle_auth_error(ex):
     response = jsonify(ex.error)
     response.status_code = ex.status_code

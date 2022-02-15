@@ -4,16 +4,14 @@ services:
   #Backend build
   api:
     build: ./Backend
+    command: python manage.py run -h 0.0.0.0
     depends_on:
       - database
     ports:
       - 5000:5000
-    expose: 
-      - "5432"
-    environment:
-      Stage: development
-      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/onlineexam-database-1
-      SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://postgres:postgres@database/
+    env_file:
+      - ./Backend/env.dev
+   
     volumes:
         - .:/code
 
@@ -29,9 +27,7 @@ services:
         API_URL: 'http://localhost:5000'
     ports:
     - "4200:80"
-   # expose: 
-  #  - "4200"
-    
+
   #DB build
   database:
     
@@ -44,6 +40,7 @@ services:
     ports:
       - 5432:5432
     volumes:
+      #- postgres_data:/var/lib/postgresql/data/
       - ./db-data/:/var/lib/postgresql/data=rwx/
 
       

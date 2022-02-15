@@ -9,3 +9,4 @@ python-jose==3.3.0
 python-dotenv
 authlib
 six
+flask_sqlalchemy
