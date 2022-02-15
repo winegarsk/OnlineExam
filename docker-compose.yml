@@ -8,10 +8,11 @@ services:
       - database
     ports:
       - 5000:5000
-
+    expose: 
+      - "5432"
     environment:
       Stage: development
-      DATABASE_URL: postgresql://postgres:postgres@0.0.0.0:5432/onlineexam-database-1
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/onlineexam-database-1
       SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://postgres:postgres@database/
     volumes:
         - .:/code
@@ -39,6 +40,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: onlineexam-database-1
     image: 'postgres:latest'
+    restart: always
     ports:
       - 5432:5432
     volumes:
