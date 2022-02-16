@@ -4,8 +4,9 @@ from flask import Flask, jsonify, request,redirect,render_template, session, url
 
 #import entities.entity
 #import entities.exam
-from .entities.entity import Session, engine, Base
-from .entities.exam import Exam, ExamSchema
+#from .entities.entity import Session, engine, Base
+#from .models import Exam
+from .models import User, db
 #import auth
 from .auth import AuthError, requires_auth
 
@@ -23,7 +24,11 @@ from flask_sqlalchemy import SQLAlchemy
 # creating the Flask application
 app = Flask(__name__)
 app.config.from_object("src.config.Config")
-database = SQLAlchemy(app)
+
+def init_db():
+    db.init_app(app)
+    db.app = app
+    db.create_all()
 
 CORS(app)
 
@@ -31,7 +36,7 @@ CORS(app)
 oauth = OAuth(app)
 
 # if needed, generate database schema
-Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)
 
 auth0 = oauth.register(
     'auth0',
@@ -45,15 +50,50 @@ auth0 = oauth.register(
     },
 )
 
+@app.route('/register', methods=['POST'])
+def register():
+    json_data = request.json
+      # mount User object
+    user = User(
+        id = json_data['id'],
+        username=json_data['username'],
+        password=json_data['password'],
+        email=json_data['email'],
+        first_name=json_data['first_name'],
+        last_name=json_data['last_name']        
+    )
+    try:
+        # persist user
+        db.session.add(user)
+        db.session.commit()
+        status = 'success'
+    except:
+        status = 'this user is already registered'
+     # return created user
+
+    db.session.close()
+    return jsonify({'result': status})
+
+   
+
 # Routes for login, callback 
 @app.route('/login')
 def login():
+    json_data = request.json
+    user = User.query.filter_by(email=json_data['email']).first()
+    if user(
+            user.password, json_data['password']):
+        session['logged_in'] = True
+        status = True
+    else:
+        status = False
     return auth0.authorize_redirect(redirect_uri='http://localhost:4200')
 
 @app.route('/logout')
 def logout():
     # Clear session stored data
     session.clear()
+    session.pop('logged_in', None)
     # Redirect user to logout endpoint
     params = {'returnTo': url_for('home', _external=True), 'client_id': 'kYsfByzSV4rxmTJSX6jmaQumLeJZVjoM'}
     return redirect('https://dev-4-frsuj0.us.auth0.com' + '/v2/logout?' + urlencode(params))
@@ -84,36 +124,42 @@ def callback_handling():
 @app.route('/exams')
 def get_exams():
     # fetching from the database
-    session = Session()
-    exam_objects = session.query(Exam).all()
+    exam_objects = db.session.query(Exam).all()
 
     # transforming into JSON-serializable objects
-    schema = ExamSchema(many=True)
-    exams = schema.dump(exam_objects)
+    
 
     # serializing as JSON
     session.close()
-    return jsonify(exams)
+    return jsonify(exam_objects)
 
 
 @app.route('/exams', methods=['POST'])
 @requires_auth
 def add_exam():
+    json_data = request.json
     # mount exam object
     posted_exam = ExamSchema(only=('title', 'description'))\
         .load(request.get_json())
 
-    exam = Exam(**posted_exam, created_by="HTTP post request")
+    exam = Exam(
+        title=json_data['title'],
+        description=json_data['description']
+    )
+    try:
+        # persist exam
+        
+        db.session.add(exam)
+        db.session.commit()
+        status = 'success'
 
-    # persist exam
-    session = Session()
-    session.add(exam)
-    session.commit()
+    except:
+        status = 'failed'
+    db.session.close()
+    return jsonify({'result': status})
+    
+   
 
-    # return created exam
-    new_exam = ExamSchema().dump(exam).data
-    session.close()
-    return jsonify(new_exam), 201
 
 @app.errorhandler(AuthError)
 def handle_auth_error(ex):

@@ -43,13 +43,5 @@ const appRoutes: Routes = [
   bootstrap: [AppComponent]
 })
 export class AppModule {
- /* constructor() {
-    Auth0.configure({
-      domain: 'dev-dm6nugc4.us.auth0.com',
-      audience: 'https://online-exam.digituz.com.br',
-      clientID: 'OznIr8gSuGNtPCfvFUsqgOXU4gd4PKaD',
-      redirectUri: 'http://localhost:4200/callback',
-      scope: 'openid profile manage:exams'
-    });
-  } */
+
 }
