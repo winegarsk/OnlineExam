@@ -6,3 +6,7 @@ pipenv==2022.1.8
 marshmallow==3.14.1
 jose==1.0.0
 python-jose==3.3.0
+python-dotenv
+authlib
+six
+flask_sqlalchemy
