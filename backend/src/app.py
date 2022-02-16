@@ -2,11 +2,15 @@
 from flask_cors import CORS
 from flask import Flask, jsonify, request,redirect,render_template, session, url_for
 
+#import entities.entity
+#import entities.exam
 from .entities.entity import Session, engine, Base
 from .entities.exam import Exam, ExamSchema
+#import auth
 from .auth import AuthError, requires_auth
 
 #Imports for connecting backend to auth0
+from six.moves.urllib.request import urlopen
 from functools import wraps
 import json
 from os import environ as env
@@ -14,13 +18,18 @@ from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv, find_dotenv
 from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
+from flask_sqlalchemy import SQLAlchemy
 
 # creating the Flask application
 app = Flask(__name__)
+app.config.from_object("src.config.Config")
+database = SQLAlchemy(app)
+
 CORS(app)
 
-#
-# oauth = OAuth(app)
+
+oauth = OAuth(app)
+
 # if needed, generate database schema
 Base.metadata.create_all(engine)
 
@@ -28,18 +37,18 @@ auth0 = oauth.register(
     'auth0',
     client_id='kYsfByzSV4rxmTJSX6jmaQumLeJZVjoM',
     client_secret='fDR6hxNSGJApKrxTdZyD2EC4ezV6oV4F5AlM_lm_Pvgb8UijifazIeJ8b3HzBEUL',
-    api_base_url='https://online-exam.com',
-    access_token_url='https://online-exam.com/oauth/token',
-    authorize_url='https://online-exam.com/authorize',
+    api_base_url='https://dev-4-frsuj0.us.auth0.com',
+    access_token_url='https://dev-4-frsuj0.us.auth0.com/oauth/token',
+    authorize_url='https://dev-4-frsuj0.us.auth0.com/authorize',
     client_kwargs={
-        'scope': 'openid profile email',
+        'scope': 'Manage exams',
     },
 )
 
 # Routes for login, callback 
 @app.route('/login')
 def login():
-    return auth0.authorize_redirect(redirect_uri='http://localhost:4200')
+    return auth0.authorize_redirect(redirect_uri='http://localhost:5000')
 
 @app.route('/callback')
 def callback_handling():
