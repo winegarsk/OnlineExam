@@ -6,6 +6,17 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+# class Exam(db.Model):
+#    __tablename__ = 'exams'
+
+#    title = db.Column(db.String)
+#    description = db.Column(db.String)
+
+#    def __init__(self, title, description, created_by):
+#        
+#        self.title = title
+#        self.description = description
+
 
 class User(db.Model):
     """User account."""
