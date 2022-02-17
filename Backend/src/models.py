@@ -1,23 +1,36 @@
 
-import datetime
+from datetime import datetime
+from sqlalchemy import create_engine, Column, String, Integer, DateTime
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 from flask_sqlalchemy import SQLAlchemy
 
-#from .app import db
-
-db = SQLAlchemy()
 
 
-class User(db.Model):
+#Database variables
+db_url = 'database:5432'
+db_name = 'onlineexam-database-1'
+db_user = 'postgres'
+db_password = 'postgres'
+
+#Connect to database through sqlalchemy
+engine = create_engine(f'postgresql://{db_user}:{db_password}@{db_url}/{db_name}')
+Session = sessionmaker(bind=engine)
+
+Base = declarative_base()
+
+
+class User(Base):
     """User account."""
 
     __tablename__ = "users"
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement="auto")
-    username = db.Column(db.String(255), unique=True, nullable=False)
-    password = db.Column(db.String, nullable=False)
-    email = db.Column(db.String(255), unique=True, nullable=False)
-    first_name = db.Column(db.String(255))
-    last_name = db.Column(db.String(255))
+    id = Column(Integer, primary_key=True, autoincrement="auto")
+    username = Column(String(255), unique=True, nullable=False)
+    password = Column(String, nullable=False)
+    email = Column(String(255), unique=True, nullable=False)
+    first_name = Column(String(255))
+    last_name = Column(String(255))
 
     def __init__(self, id, username, password,email,first_name,last_name):
         self.id = id

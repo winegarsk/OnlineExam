@@ -1,14 +1,15 @@
 # coding=utf-8
 from flask_cors import CORS
 from flask import Flask, jsonify, request,redirect,render_template, session, url_for
+from .models import Session, engine, Base
+from .models import User
+from .auth import AuthError, requires_auth
 
 #import entities.entity
 #import entities.exam
-#from .entities.entity import Session, engine, Base
+#import 
 #from .models import Exam
-from .models import User, db
-#import auth
-from .auth import AuthError, requires_auth
+
 
 #Imports for connecting backend to auth0
 from six.moves.urllib.request import urlopen
@@ -25,18 +26,13 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.config.from_object("src.config.Config")
 
-def init_db():
-    db.init_app(app)
-    db.app = app
-    db.create_all()
-
 CORS(app)
-
 
 oauth = OAuth(app)
 
-# if needed, generate database schema
-# Base.metadata.create_all(engine)
+
+
+session = Session()
 
 auth0 = oauth.register(
     'auth0',
@@ -64,14 +60,14 @@ def register():
     )
     try:
         # persist user
-        db.session.add(user)
-        db.session.commit()
+        session.add(user)
+        session.commit()
         status = 'success'
     except:
         status = 'this user is already registered'
      # return created user
 
-    db.session.close()
+    session.close()
     return jsonify({'result': status})
 
    
@@ -124,7 +120,7 @@ def callback_handling():
 @app.route('/exams')
 def get_exams():
     # fetching from the database
-    exam_objects = db.session.query(Exam).all()
+    exam_objects = session.query(Exam).all()
 
     # transforming into JSON-serializable objects
     
@@ -149,13 +145,13 @@ def add_exam():
     try:
         # persist exam
         
-        db.session.add(exam)
-        db.session.commit()
+        session.add(exam)
+        session.commit()
         status = 'success'
 
     except:
         status = 'failed'
-    db.session.close()
+        session.close()
     return jsonify({'result': status})
     
    
