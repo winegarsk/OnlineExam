@@ -1,47 +1,36 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-import {HttpClientModule} from '@angular/common/http';
-import { AuthModule } from '@auth0/auth0-angular';
-import {AppComponent} from './app.component';
-import {ExamsApiService} from './exams/exams-api.service';
-import {ExamFormComponent} from './exams/exam-form.components';
-import {RouterModule, Routes} from '@angular/router';
-import {ExamsComponent} from './exams/exams.components';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { ToastrModule } from "ngx-toastr";
 
-// import * as Auth0 from 'auth0-web';
-import {CallbackComponent} from './callback.component';
+import { SidebarModule } from './sidebar/sidebar.module';
+import { FooterModule } from './shared/footer/footer.module';
+import { NavbarModule} from './shared/navbar/navbar.module';
+import { FixedPluginModule} from './shared/fixedplugin/fixedplugin.module';
 
+import { AppComponent } from './app.component';
+import { AppRoutes } from './app.routing';
 
-
-const appRoutes: Routes = [
-  { path: 'new-exam', component: ExamFormComponent },
-  { path: '', component: ExamsComponent },
-  { path: 'callback', component: CallbackComponent },
-];
+import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    ExamFormComponent,
-    ExamsComponent,
-    CallbackComponent,
-
+    AdminLayoutComponent
   ],
   imports: [
-    BrowserModule,
-    HttpClientModule,
-    AuthModule.forRoot({
-      domain: 'dev-4-frsuj0.us.auth0.com',
-      clientId: 'kYsfByzSV4rxmTJSX6jmaQumLeJZVjoM'
+    BrowserAnimationsModule,
+    RouterModule.forRoot(AppRoutes,{
+      useHash: true
     }),
-   RouterModule.forRoot(
-      appRoutes,
-      ),
+    SidebarModule,
+    NavbarModule,
+    ToastrModule.forRoot(),
+    FooterModule,
+    FixedPluginModule
   ],
-  providers: [ExamsApiService],
+  providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-
-}
+export class AppModule { }
