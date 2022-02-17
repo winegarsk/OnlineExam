@@ -6,6 +6,17 @@ from sqlalchemy.orm import sessionmaker
 from flask_sqlalchemy import SQLAlchemy
 
 
+# class Exam(db.Model):
+#    __tablename__ = 'exams'
+
+#    title = db.Column(db.String)
+#    description = db.Column(db.String)
+
+#    def __init__(self, title, description, created_by):
+#        
+#        self.title = title
+#        self.description = description
+
 
 #Database variables
 db_url = 'database:5432'
