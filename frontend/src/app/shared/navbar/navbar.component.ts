@@ -10,7 +10,7 @@ import { Location} from '@angular/common';
 })
 
 export class NavbarComponent implements OnInit{
-    private listTitles: any[];
+    private listTitles!: any[];
     location: Location;
     private nativeElement: Node;
     private toggleButton;

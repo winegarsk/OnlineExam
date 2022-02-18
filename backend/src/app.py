@@ -1,13 +1,13 @@
 # coding=utf-8
+from flask.cli import FlaskGroup
 from flask_cors import CORS
 from flask import Flask, jsonify, request,redirect,render_template, session, url_for
 from .models import Session, engine, Base
 from .models import User
 from .auth import AuthError, requires_auth
+from urllib.request import Request, urlopen
+import json
 
-#import entities.entity
-#import entities.exam
-#import 
 #from .models import Exam
 
 
@@ -22,13 +22,19 @@ from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
 from flask_sqlalchemy import SQLAlchemy
 
+
+
+
+
+
 # creating the Flask application
-app = Flask(__name__)
-app.config.from_object("src.config.Config")
+server = Flask(__name__)
+server.config.from_object("src.config.Config")
 
-CORS(app)
+CORS(server)
+cli = FlaskGroup(server)
 
-oauth = OAuth(app)
+oauth = OAuth(server)
 
 
 
@@ -45,8 +51,17 @@ auth0 = oauth.register(
         'scope': 'Manage exams',
     },
 )
+@server.route("/questions")
+def get_questions():
+    req = Request('https://quizapi.io/api/v1/questions?apiKey=oBj6A4kItQwm8ncj0IXgiIRhxKNGOFNyvec0GZ3H&limit=10', headers={'User-Agent': 'Mozilla/5.0'})
 
-@app.route('/register', methods=['POST'])
+    data = urlopen(req).read()
+    dict = json.loads(data)
+
+    print(dict)
+    return jsonify({'result': "success"})
+
+@server.route('/register', methods=['POST'])
 def register():
     json_data = request.json
       # mount User object
@@ -73,7 +88,7 @@ def register():
    
 
 # Routes for login, callback 
-@app.route('/login')
+@server.route('/login')
 def login():
     json_data = request.json
     user = User.query.filter_by(email=json_data['email']).first()
@@ -85,7 +100,7 @@ def login():
         status = False
     return auth0.authorize_redirect(redirect_uri='http://localhost:4200')
 
-@app.route('/logout')
+@server.route('/logout')
 def logout():
     # Clear session stored data
     session.clear()
@@ -94,14 +109,14 @@ def logout():
     params = {'returnTo': url_for('home', _external=True), 'client_id': 'kYsfByzSV4rxmTJSX6jmaQumLeJZVjoM'}
     return redirect('https://dev-4-frsuj0.us.auth0.com' + '/v2/logout?' + urlencode(params))
 
-@app.route('/dashboard')
+@server.route('/dashboard')
 @requires_auth
 def dashboard():
     return render_template('dashboard.html',
                            userinfo=session['profile'],
                            userinfo_pretty=json.dumps(session['jwt_payload'], indent=4))
 
-@app.route('/callback')
+@server.route('/callback')
 def callback_handling():
     # Handles response from token endpoint
     auth0.authorize_access_token()
@@ -117,7 +132,7 @@ def callback_handling():
     }
     return redirect('/dashboard')
 
-@app.route('/exams')
+@server.route('/exams')
 def get_exams():
     # fetching from the database
     exam_objects = session.query(Exam).all()
@@ -130,7 +145,7 @@ def get_exams():
     return jsonify(exam_objects)
 
 
-@app.route('/exams', methods=['POST'])
+@server.route('/exams', methods=['POST'])
 @requires_auth
 def add_exam():
     json_data = request.json
@@ -157,7 +172,7 @@ def add_exam():
    
 
 
-@app.errorhandler(AuthError)
+@server.errorhandler(AuthError)
 def handle_auth_error(ex):
     response = jsonify(ex.error)
     response.status_code = ex.status_code

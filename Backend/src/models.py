@@ -1,21 +1,13 @@
 
+from array import array
+from ast import Str
 from datetime import datetime
+from unicodedata import category
 from sqlalchemy import create_engine, Column, String, Integer, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from flask_sqlalchemy import SQLAlchemy
 
-
-# class Exam(db.Model):
-#    __tablename__ = 'exams'
-
-#    title = db.Column(db.String)
-#    description = db.Column(db.String)
-
-#    def __init__(self, title, description, created_by):
-#        
-#        self.title = title
-#        self.description = description
 
 
 #Database variables
