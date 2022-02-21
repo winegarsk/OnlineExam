@@ -3,7 +3,7 @@ from array import array
 from ast import Str
 from datetime import datetime
 from unicodedata import category
-from sqlalchemy import create_engine, Column, String, Integer, DateTime
+from sqlalchemy import MetaData, create_engine, Column, String, Integer, DateTime, select
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from flask_sqlalchemy import SQLAlchemy
@@ -22,6 +22,60 @@ Session = sessionmaker(bind=engine)
 
 Base = declarative_base()
 
+class Answer(Base):
+    'Answer', MetaData, 
+    __tablename__ = 'answers'
+
+    id = Column(Integer, primary_key=True, autoincrement="auto")
+    ExamID= Column(Integer)
+    questionID = Column(Integer)
+    correct= Column(Integer)
+    answer=Column(String)
+
+    def __init__(self,  ExamID, questionID, correct, answer):
+        
+        self.ExamID=ExamID
+        self.questionID = questionID
+        
+        self.correct=correct
+        self.answer=answer
+
+class Question(Base):
+    __tablename__ = 'questions'
+
+    id = Column(Integer, primary_key=True, autoincrement="auto")
+    ExamID= Column(Integer)
+    questionID = Column(Integer)
+    question = Column(String)
+    description = Column(String)
+    explanation=Column(String)
+    category=Column(String)
+    difficulty=Column(String)
+
+    def __init__(self,  ExamID, question, questionID, description,explanation,category,difficulty):
+        self.ExamID=ExamID
+        self.question = question
+        self.questionID=questionID
+        self.description = description
+        self.explanation=explanation
+        self.category=category
+        self.difficulty=difficulty
+
+class Exam(Base):
+    __tablename__ = 'exams'
+
+    id = Column(Integer, primary_key=True, autoincrement="auto")
+    title = Column(String)
+    description = Column(String)
+    category= Column(String)
+    score= Column(Integer)
+
+    def __init__(self,id, title, description,category,score):
+        self.id=id
+        self.title = title
+        self.description = description
+        self.category=category
+        self.score=score
 
 class User(Base):
     """User account."""

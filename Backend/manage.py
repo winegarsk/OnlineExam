@@ -22,6 +22,7 @@ def create_db():
 @src.app.cli.command("seed_db")
 def seed_db():
     session.add(src.models.User(id=1, email="asearle@g.clemson.edu",first_name="Adrian",last_name="Searles",username="asearle",password="Pspgame12"))
+    
     session.commit()
 
 

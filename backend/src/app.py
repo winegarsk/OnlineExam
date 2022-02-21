@@ -2,8 +2,9 @@
 from flask.cli import FlaskGroup
 from flask_cors import CORS
 from flask import Flask, jsonify, request,redirect,render_template, session, url_for
-from .models import Session, engine, Base
-from .models import User
+from sqlalchemy import null, select
+from .models import Answer, Exam, Session, engine, Base
+from .models import User,Question
 from .auth import AuthError, requires_auth
 from urllib.request import Request, urlopen
 import json
@@ -58,7 +59,44 @@ def get_questions():
     data = urlopen(req).read()
     dict = json.loads(data)
 
-    print(dict)
+    correct_answers = []
+    for i in dict:
+        
+        for key in i:
+            # print(i.get(key))
+            #print(key)
+            #print(i[key])
+            if key == "question":
+                try:
+                    session.add(Question( ExamID=None,questionID = i.get('id'), question = i.get('question'), description=i.get('description'),explanation=i.get('explanation'),category=i.get('category'),difficulty=i.get('difficulty')))
+                    session.commit()
+                except:
+                    session.rollback()
+                    raise
+                finally:
+                    session.close()
+            if key == "answers":
+                for k in i.get(key):
+                    choice = i.get(key)
+                    try:
+                        session.add(Answer( ExamID=None,questionID = i.get('id'), correct= None,answer= choice.get(k)))
+                        session.commit()
+                    except:
+                        session.rollback()
+                        raise
+                    finally:
+                        session.close()
+            if key == "correct_answers":
+                for k in i.get(key):
+                    choice2 = i.get(key)
+                    s= select([Answer]).where(Answer.questionID == i.get('id'))
+                    type(s)
+                   # s = Answer.select().where(Answer.questionID == i.get('id'))
+                   # setattr(s,'correct',choice2.get(k))
+                   # correct_answers.append(s)
+                   # print(correct_answers)
+
+            
     return jsonify({'result': "success"})
 
 @server.route('/register', methods=['POST'])
