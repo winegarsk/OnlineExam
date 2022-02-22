@@ -29,7 +29,7 @@ class Answer(Base):
     id = Column(Integer, primary_key=True, autoincrement="auto")
     ExamID= Column(Integer)
     questionID = Column(Integer)
-    correct= Column(Integer)
+    correct= Column(String)
     answer=Column(String)
 
     def __init__(self,  ExamID, questionID, correct, answer):
@@ -70,8 +70,8 @@ class Exam(Base):
     category= Column(String)
     score= Column(Integer)
 
-    def __init__(self,id, title, description,category,score):
-        self.id=id
+    def __init__(self, title, description,category,score):
+    
         self.title = title
         self.description = description
         self.category=category
@@ -89,8 +89,8 @@ class User(Base):
     first_name = Column(String(255))
     last_name = Column(String(255))
 
-    def __init__(self, id, username, password,email,first_name,last_name):
-        self.id = id
+    def __init__(self,  username, password,email,first_name,last_name):
+        
         self.username = username
         self.password = password
         self.email = email

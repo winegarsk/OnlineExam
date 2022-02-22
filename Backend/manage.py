@@ -21,8 +21,9 @@ def create_db():
 
 @src.app.cli.command("seed_db")
 def seed_db():
-    session.add(src.models.User(id=1, email="asearle@g.clemson.edu",first_name="Adrian",last_name="Searles",username="asearle",password="Pspgame12"))
-    
+    session.add(src.models.User(email="asearle@g.clemson.edu",first_name="Adrian",last_name="Searles",username="asearle",password="Pspgame12"))
+    session.add(src.models.Exam(title="TestQuiz",description="An example Exam",category="practice",score= 10))
+    session.query(src.models.Question).update({src.models.Question.ExamID: session.query(src.models.Exam.id).filter(src.models.Exam.title =="TestQuiz")})
     session.commit()
 
 

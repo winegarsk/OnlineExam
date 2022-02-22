@@ -87,14 +87,15 @@ def get_questions():
                     finally:
                         session.close()
             if key == "correct_answers":
-                for k in i.get(key):
+                for j in i.get(key):
                     choice2 = i.get(key)
-                    s= select([Answer]).where(Answer.questionID == i.get('id'))
-                    type(s)
-                   # s = Answer.select().where(Answer.questionID == i.get('id'))
-                   # setattr(s,'correct',choice2.get(k))
-                   # correct_answers.append(s)
-                   # print(correct_answers)
+                    query =session.query(Answer).filter(Answer.questionID == i.get('id') and Answer.correct == None)
+
+                    for user in query:
+                        query.update({Answer.correct: choice2.get(j)})
+                        break
+
+                    
 
             
     return jsonify({'result': "success"})
