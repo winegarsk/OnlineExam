@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import 'rxjs/add/operator/catch';
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
 
 import {API_URL} from '../env';
 import {Exam} from './exam.model';
@@ -16,14 +18,14 @@ export class ExamsApiService {
   }
 
   private static _handleError(err: HttpErrorResponse | any) {
-    return Observable.throw(err.message || 'Error: Unable to complete request.');
+    return throwError(err.message || 'Error: Unable to complete request.');
   }
 
   // GET list of public, future events
   getExams(): Observable<Exam[]> {
     return this.http
-      .get<Exam[]>(`${API_URL}/exams`)
-      .catch(ExamsApiService._handleError);
+      .get<Exam[]>(`${API_URL}/exams`).pipe(
+      catchError(ExamsApiService._handleError));
   }
 
 

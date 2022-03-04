@@ -1,22 +1,30 @@
-import * as Auth0 from 'auth0-web';
+
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import {Exam} from './exam.model';
 import {ExamsApiService} from './exams-api.service';
+import { AuthService } from '@auth0/auth0-angular';
+import { DOCUMENT } from '@angular/common';
+import { Inject } from '@angular/core';
 
 @Component({
   selector: 'exams',
   template: `
     <div>
-      <button routerLink="/new-exam">New Exam</button>
-      <button (click)="signIn()" *ngIf="!authenticated">Sign In</button>
-      <button (click)="signOut()" *ngIf="authenticated">Sign Out</button>
-      <p *ngIf="authenticated">Hello, {{getProfile!().name!}}</p>
-      <ul>
-        <li *ngFor="let exam of examsList">
-          {{exam.title}}
-        </li>
+      <ul *ngIf="auth.user$ | async as user">
+        <li>{{ user.name }}</li>
+        <li>{{ user.email }}</li>
       </ul>
+      <ng-container *ngIf="auth.isAuthenticated$ | async; else loggedOut">
+        <button (click)="auth.logout({ returnTo: document.location.origin })">
+          Log out
+        </button>
+      </ng-container>
+
+      <ng-template #loggedOut>
+        <button (click)="auth.loginWithRedirect()">Log in</button>
+      </ng-template>
+        <button routerLink="/new-exam">New Exam</button>
     </div>
   `
 })
@@ -25,11 +33,9 @@ export class ExamsComponent implements OnInit, OnDestroy {
   examsList: Exam[]|undefined;
   authenticated = false;
 
-  constructor(private examsApi: ExamsApiService) { }
-
-  signIn = Auth0.signIn;
-  signOut = Auth0.signOut;
-  getProfile = Auth0.getProfile;
+  
+  constructor(@Inject(DOCUMENT) public document: Document, private examsApi: ExamsApiService,public auth: AuthService) { }
+ 
 
   ngOnInit() {
     this.examsListSubs = this.examsApi
@@ -40,7 +46,6 @@ export class ExamsComponent implements OnInit, OnDestroy {
         console.error
       );
     const self = this;
-    Auth0.subscribe((authenticated) => (self.authenticated = authenticated));
   }
 
   ngOnDestroy() {
